@@ -323,65 +323,65 @@ void UART8_IRQHandler(void)
     //TODO:消息类型 1|A|320X|320Y| B|320X|320Y  "1"数量,“A”类别,"320X|320Y"坐标
     // "F" 传送带停止运行
     //单分类模式
-//    if (RxBuffer[0] == '1')
-//    {
-//      //传送带开始运行
-//      Conveyor_Set_Vel(Conveyor_Vel);
-//      //A:可回收
-//      if (RxBuffer[1] == 'A')
-//      {
-//        trash.tar_trash = 1;
-//        Trash_Set();
-//      }
-//      //B：有害
-//      if (RxBuffer[1] == 'B')
-//      {
-//        trash.tar_trash = 2;
-//        Trash_Set();
-//      }
-//      //C：厨余
-//      if (RxBuffer[1] == 'C')
-//      {
-//        trash.tar_trash = 3;
-//        Trash_Set();
-//      }
-//      //D：其他
-//      if (RxBuffer[1] == 'D')
-//      {
-//        trash.tar_trash = 4;
-//        Trash_Set();
-//      }
-//    }
-//    //多分类
-//    if ((int) (RxBuffer[0] - '0') >= 2 && (RxBuffer[0] != 'F'))
-//    {
-//      //传送带开始运行
-//      Conveyor_Set_Vel(Conveyor_Vel);
-//      trash.a_ = RxBuffer[1]; //第一个垃圾的类别
-//      trash.b_ = RxBuffer[10];//第二个垃圾的类别
-//      //trash_a的纵坐标
-//      trash.X1 = (int) ((RxBuffer[2] - '0') * 100 + (RxBuffer[3] - '0') * 10 + (RxBuffer[4] - '0'));
-//      //trash_b的纵坐标
-//      trash.X2 = (int) ((RxBuffer[11] - '0') * 100 + (RxBuffer[12] - '0') * 10 + (RxBuffer[13] - '0'));
-//      trash.tar_trash = Trash_Get(trash.a_, trash.b_, trash.X1, trash.X2);
-//      UART_printf(&huart8, "%d,%d,%d\r\n", trash.X1, trash.X2, trash.tar_trash);
-//      if (abs(trash.tar_trash) <= 4)
-//      {
-//        //垃圾桶到位
-//        Trash_Set();
-//      }
-//    }
-//    //传送带停止
-//    if (RxBuffer[0] == 'F')
-//    {
-//      Conveyor_Set_Vel(Conveyor_Stop);
-//    }
-//    //判断上一个垃圾类别
-//    LastBuffer[0] = RxBuffer[1];
-//    //判断字节接收完成，清零字节
-//    RxNum = 0;
-//    memset(RxBuffer, 0, RxBuffSize);                    //清零
-//    HAL_UART_Receive_DMA(&huart8, RxBuffer, RxBuffSize);//重新开启DMA接收
+    if (RxBuffer[0] == '1')
+    {
+      //传送带开始运行
+      Conveyor_Set_Vel(Conveyor_Vel);
+      //A:可回收
+      if (RxBuffer[1] == 'A')
+      {
+        trash.tar_trash = 1;
+        Trash_Set();
+      }
+      //B：有害
+      if (RxBuffer[1] == 'B')
+      {
+        trash.tar_trash = 2;
+        Trash_Set();
+      }
+      //C：厨余
+      if (RxBuffer[1] == 'C')
+      {
+        trash.tar_trash = 3;
+        Trash_Set();
+      }
+      //D：其他
+      if (RxBuffer[1] == 'D')
+      {
+        trash.tar_trash = 4;
+        Trash_Set();
+      }
+    }
+    //多分类
+    if ((int) (RxBuffer[0] - '0') >= 2 && (RxBuffer[0] != 'F'))
+    {
+      //传送带开始运行
+      Conveyor_Set_Vel(Conveyor_Vel);
+      trash.a_ = RxBuffer[1]; //第一个垃圾的类别
+      trash.b_ = RxBuffer[10];//第二个垃圾的类别
+      //trash_a的纵坐标
+      trash.X1 = (int) ((RxBuffer[2] - '0') * 100 + (RxBuffer[3] - '0') * 10 + (RxBuffer[4] - '0'));
+      //trash_b的纵坐标
+      trash.X2 = (int) ((RxBuffer[11] - '0') * 100 + (RxBuffer[12] - '0') * 10 + (RxBuffer[13] - '0'));
+      trash.tar_trash = Trash_Get(trash.a_, trash.b_, trash.X1, trash.X2);
+      UART_printf(&huart8, "%d,%d,%d\r\n", trash.X1, trash.X2, trash.tar_trash);
+      if (abs(trash.tar_trash) <= 4)
+      {
+        //垃圾桶到位
+        Trash_Set();
+      }
+    }
+    //传送带停止
+    if (RxBuffer[0] == 'F')
+    {
+      Conveyor_Set_Vel(Conveyor_Stop);
+    }
+    //判断上一个垃圾类别
+    LastBuffer[0] = RxBuffer[1];
+    //判断字节接收完成，清零字节
+    RxNum = 0;
+    memset(RxBuffer, 0, RxBuffSize);                    //清零
+    HAL_UART_Receive_DMA(&huart8, RxBuffer, RxBuffSize);//重新开启DMA接收
 //单分类模式
 #ifdef Single
     //1:可回收
