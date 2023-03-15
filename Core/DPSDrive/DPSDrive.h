@@ -4,7 +4,7 @@
 #include <stdint.h>
 #define Queue_Size 10
 #define trash_init_pos (0)
-#define tle_init_pos (100.0)
+#define tar_init_angle (100.0)//首个垃圾桶的目标位置
 typedef struct {
   uint8_t *base;
   uint8_t front;

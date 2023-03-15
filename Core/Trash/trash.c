@@ -23,9 +23,12 @@ void Trash_Init(void)
   {
     dps.init_angle += (float) ReadAngle();
   }
+  //获取当前磁编码角度
   dps.init_angle /= 50;
-  dps.offset_angle = dps.init_angle - tle_init_pos;
+  //获取角度偏差 = 当前（初始）角度-目标角度
+  dps.offset_angle = dps.init_angle - tar_init_angle;
   //  UART_printf(&huart4, "%lf,%lf\r\n", dps.init_angle, dps.offset_angle);
+  //判断是正转还是反转
   if (dps.offset_angle < 0.0f)
   {
     dps.init_pos += (int) (fabs(dps.offset_angle) / 90.0f * Bin_Offset * 1.0f);
@@ -61,7 +64,6 @@ void Trash_Set(void)
 /**
  * 多分类
  * 获取传送带前面的垃圾（第一个进入垃圾桶的垃圾）
- * TODO:接收的数据需要现场调试，还未调试 date：2023/2/4
  * @param trash_a
  * @param trash_b
  * @param Y1

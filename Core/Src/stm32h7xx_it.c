@@ -325,8 +325,8 @@ void UART8_IRQHandler(void)
     // 单分类模式
     if (RxBuffer[0] == '1')
     {
-      //传送带开始运行
-      Conveyor_Set_Vel(Conveyor_Vel);
+      //传送带高速运行
+      Conveyor_Set_Vel(Conveyor_High_Vel);
       //A:可回收
       if (RxBuffer[1] == 'A')
       {
@@ -355,16 +355,21 @@ void UART8_IRQHandler(void)
     //多分类
     if ((int) (RxBuffer[0] - '0') >= 2 && (RxBuffer[0] != 'F'))
     {
-      //传送带开始运行
-      Conveyor_Set_Vel(Conveyor_Vel);
       trash.a_ = RxBuffer[1]; //第一个垃圾的类别
       trash.b_ = RxBuffer[10];//第二个垃圾的类别
       //trash_a的纵坐标
       trash.X1 = (int) ((RxBuffer[2] - '0') * 100 + (RxBuffer[3] - '0') * 10 + (RxBuffer[4] - '0'));
       //trash_b的纵坐标
       trash.X2 = (int) ((RxBuffer[11] - '0') * 100 + (RxBuffer[12] - '0') * 10 + (RxBuffer[13] - '0'));
+      //TODO:传送带根据垃圾的速度变化测试还没调试
+      //垃圾距离垃圾桶很远
+      if (abs(trash.X1) > 300)
+        //高速运行
+        Conveyor_Set_Vel(Conveyor_High_Vel);
+      else
+        //距离垃圾桶较为近，低速运行，给垃圾桶归位的时间
+        Conveyor_Set_Vel(Conveyor_Low_Vel);
       trash.tar_trash = Trash_Get(trash.a_, trash.b_, trash.X1, trash.X2);
-      UART_printf(&huart8, "%d,%d,%d\r\n", trash.X1, trash.X2, trash.tar_trash);
       if (abs(trash.tar_trash) <= 4)
       {
         //垃圾桶到位
