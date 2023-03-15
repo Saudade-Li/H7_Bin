@@ -327,6 +327,13 @@ void UART8_IRQHandler(void)
     {
       //传送带高速运行
       Conveyor_Set_Vel(Conveyor_High_Vel);
+      //TODO:加入数据接收滤波的决策，还未验证
+      //      trash.tar_trash = Trash_Decision(RxBuffer[1]);
+      //      //计数到5次，垃圾桶前往设定位置
+      //      if (trash.tar_trash != 0)
+      //      {
+      //        Trash_Set();
+      //      }
       //A:可回收
       if (RxBuffer[1] == 'A')
       {
@@ -369,7 +376,7 @@ void UART8_IRQHandler(void)
       else
         //距离垃圾桶较为近，低速运行，给垃圾桶归位的时间
         Conveyor_Set_Vel(Conveyor_Low_Vel);
-      trash.tar_trash = Trash_Get(trash.a_, trash.b_, trash.X1, trash.X2);
+      trash.tar_trash = Multi_Trash_Get(trash.a_, trash.b_, trash.X1, trash.X2);
       if (abs(trash.tar_trash) <= 4)
       {
         //垃圾桶到位

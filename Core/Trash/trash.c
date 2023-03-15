@@ -62,7 +62,7 @@ void Trash_Set(void)
   trash.curr_pos = trash.tar_pos;
 }
 /**
- * 多分类
+ * TODO:多分类
  * 获取传送带前面的垃圾（第一个进入垃圾桶的垃圾）
  * @param trash_a
  * @param trash_b
@@ -70,11 +70,53 @@ void Trash_Set(void)
  * @param Y2
  * @return
  */
-int Trash_Get(uint8_t trash_a, uint8_t trash_b, int X1, int X2)
+int Multi_Trash_Get(uint8_t trash_a, uint8_t trash_b, int X1, int X2)
 {
   if (X1 > X2)
   {
     return (int) (trash_a - 'A' + 1);
   } else
     return (int) (trash_b - 'A' + 1);
+}
+/**
+ * 数据接收滤波
+ * @param rx_buff
+ * @return
+ */
+int Trash_Decision(uint8_t rx_buff)
+{
+  trash.count++;
+  if (rx_buff == 'A')
+    trash.count_a++;
+  if (rx_buff == 'B')
+    trash.count_b++;
+  if (rx_buff == 'C')
+    trash.count_c++;
+  if (rx_buff == 'D')
+    trash.count_d++;
+  //检测5次接收到的数据
+  if (trash.count == 5)
+  {
+    if (trash.count_a >= trash.count_b)
+      trash.count_max = trash.count_a;
+    else if (trash.count_c >= trash.count_max)
+      trash.count_max = trash.count_c;
+    else if (trash.count_d >= trash.count_max)
+      trash.count_max = trash.count_d;
+    //可回收
+    if (trash.count_max == trash.count_a)
+      return 1;
+    //有害
+    else if (trash.count_max == trash.count_b)
+      return 2;
+    //厨余
+    else if (trash.count_max == trash.count_c)
+      return 3;
+    //其他
+    else if (trash.count_max == trash.count_d)
+      return 4;
+    //重新准备计数
+    trash.count = 0;
+  } else
+    return 0;
 }

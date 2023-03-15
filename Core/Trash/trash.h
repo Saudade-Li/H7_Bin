@@ -17,6 +17,14 @@ typedef struct {
   int res;
   int tar_pos;
   int curr_pos;
+  //垃圾置信度决策
+  int count;
+  int count_a;
+  int count_b;
+  int count_c;
+  int count_d;
+  int count_max;
+  int count_stop;
 #ifdef Multi
   int a_;
   int b_;
@@ -26,5 +34,6 @@ typedef struct {
 } Trash_t;
 void Trash_Init();
 void Trash_Set(void);
-int Trash_Get(uint8_t trash_a, uint8_t trash_b, int Y1, int Y2);
+int Multi_Trash_Get(uint8_t trash_a, uint8_t trash_b, int Y1, int Y2);
+int Trash_Decision(uint8_t rx_buff);
 #endif//H7_BIN_V1_0_TRASH_H
