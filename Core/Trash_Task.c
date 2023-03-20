@@ -24,7 +24,7 @@ void trash_task(void *argument)
   {
     key_action();
     //    dps.init_angle = ReadAngle();
-    //    UART_printf(&huart4, "%lf\r\n", dps.init_angle);
+    //    UART_printf(&huart5, "%lf\r\n", dps.init_angle);
     osDelay(1);
   }
 }

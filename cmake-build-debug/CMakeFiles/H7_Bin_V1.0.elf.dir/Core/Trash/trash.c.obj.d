@@ -73,6 +73,7 @@ CMakeFiles/H7_Bin_V1.0.elf.dir/Core/Trash/trash.c.obj: \
  E:\STM32_Projects\H7_Bin_V1.0\Drivers\STM32H7xx_HAL_Driver\Inc/stm32h7xx_hal_tim_ex.h \
  E:\STM32_Projects\H7_Bin_V1.0\Drivers\STM32H7xx_HAL_Driver\Inc/stm32h7xx_hal_uart.h \
  E:\STM32_Projects\H7_Bin_V1.0\Drivers\STM32H7xx_HAL_Driver\Inc/stm32h7xx_hal_uart_ex.h \
+ E:\STM32_Projects\H7_Bin_V1.0\Core\Conveyor/conveyor.h \
  E:\STM32_Projects\H7_Bin_V1.0\Core\Debug/debug.h \
  E:\STM32_Projects\H7_Bin_V1.0\Drivers\Tle5012b/tle5012b.h \
  E:\STM32_Projects\H7_Bin_V1.0\Core\Inc/main.h \

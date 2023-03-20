@@ -25,6 +25,7 @@ typedef struct {
   int count_d;
   int count_max;
   int count_stop;
+  int final_bin;
 #ifdef Multi
   int a_;
   int b_;
@@ -36,4 +37,5 @@ void Trash_Init();
 void Trash_Set(void);
 int Multi_Trash_Get(uint8_t trash_a, uint8_t trash_b, int Y1, int Y2);
 int Trash_Decision(uint8_t rx_buff);
+void Count_Clear(void);
 #endif//H7_BIN_V1_0_TRASH_H

@@ -4,6 +4,7 @@
 
 #include "trash.h"
 #include "DPSDrive.h"
+#include "conveyor.h"
 #include "debug.h"
 #include "stdio.h"
 #include "tle5012b.h"
@@ -37,12 +38,15 @@ void Trash_Init(void)
     dps.init_pos -= (int) (fabs(dps.offset_angle) / 90.0f * Bin_Offset * 1.0f);
   }
   DPS_SetPosition(2, dps.init_pos);
-  // 当前垃圾桶设置为可回收(编号1)
+  //停止传送带
+  Conveyor_Set_Vel(Conveyor_Stop);
+  //当前垃圾桶设置为可回收(编号1)
   trash.curr_trash = 1;
   //更新垃圾桶的初始位置
   trash.curr_pos = dps.init_pos;
 }
-/**设定垃圾桶
+/**
+ * 设定垃圾桶
  *  1:可回收，2：有害，3：厨余，4：其他
  * @param trash_num
  */
@@ -62,7 +66,7 @@ void Trash_Set(void)
   trash.curr_pos = trash.tar_pos;
 }
 /**
- * TODO:多分类
+ * NOTE:多分类
  * 获取传送带前面的垃圾（第一个进入垃圾桶的垃圾）
  * @param trash_a
  * @param trash_b
@@ -74,9 +78,11 @@ int Multi_Trash_Get(uint8_t trash_a, uint8_t trash_b, int X1, int X2)
 {
   if (X1 > X2)
   {
-    return (int) (trash_a - 'A' + 1);
+    return trash_a;
+    //    return (int) (trash_a - 'A' + 1);
   } else
-    return (int) (trash_b - 'A' + 1);
+    return trash_b;
+  //    return (int) (trash_b - 'A' + 1);
 }
 /**
  * 数据接收滤波
@@ -99,24 +105,51 @@ int Trash_Decision(uint8_t rx_buff)
   {
     if (trash.count_a >= trash.count_b)
       trash.count_max = trash.count_a;
-    else if (trash.count_c >= trash.count_max)
+    if (trash.count_b >= trash.count_a)
+      trash.count_max = trash.count_b;
+    if (trash.count_c >= trash.count_max)
       trash.count_max = trash.count_c;
-    else if (trash.count_d >= trash.count_max)
+    if (trash.count_d >= trash.count_max)
       trash.count_max = trash.count_d;
     //可回收
     if (trash.count_max == trash.count_a)
+    {
+      //重新准备计数
+      Count_Clear();
       return 1;
+    }
     //有害
     else if (trash.count_max == trash.count_b)
+    {
+      //重新准备计数
+      Count_Clear();
       return 2;
+    }
     //厨余
     else if (trash.count_max == trash.count_c)
+    {
+      //重新准备计数
+      Count_Clear();
       return 3;
+    }
     //其他
     else if (trash.count_max == trash.count_d)
+    {
+      //重新准备计数
+      Count_Clear();
       return 4;
-    //重新准备计数
-    trash.count = 0;
+    }
   } else
     return 0;
+}
+/**
+ * 计数清零
+ */
+void Count_Clear(void)
+{
+  trash.count = 0;
+  trash.count_a = 0;
+  trash.count_b = 0;
+  trash.count_c = 0;
+  trash.count_d = 0;
 }
